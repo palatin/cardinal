@@ -33,7 +33,7 @@ fun <T> Flow<T>.dropWhileBusy(): Flow<T> = channelFlow {
 /**
  * Consumes only values by given [T] type
  */
-inline fun <reified T : Any> Flow<Any>.ofType(): Flow<T> = flow<T> {
+inline fun <reified T> Flow<*>.ofType(): Flow<T> = flow<T> {
     collect {
         if (it is T)
             emit(it)

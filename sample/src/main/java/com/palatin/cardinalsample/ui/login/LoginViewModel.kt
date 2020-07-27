@@ -62,7 +62,6 @@ class LoginViewModel(private val accountRepository: AccountRepository,
             .ofType<Action.OnLoginClicked>()
             .unlimited()
             .dropWhileBusy()
-            .transform { dropWhileBusy() }
             .reduceAction( reducer)
             .transformAction {
                 when(val result = accountRepository.login(state.email, state.password)) {

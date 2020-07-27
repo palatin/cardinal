@@ -32,7 +32,7 @@ class ActionFlow<Action>(@PublishedApi internal val flow: Flow<Action>) {
     /**
      * Allows applying transformation directly to [Flow]
      */
-    inline fun <F> transform(transformer: Flow<Action>.() -> Flow<F>) =
+    inline fun transform(transformer: Flow<Action>.() -> Flow<Action>) =
         ActionFlow(transformer(flow))
 
     /**

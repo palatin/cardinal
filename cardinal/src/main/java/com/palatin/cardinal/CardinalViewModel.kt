@@ -134,13 +134,7 @@ open class CardinalViewModel<State : Any, Action : Any, SideEffect : Any>(initia
      * Changes flow on the [F] action type
      */
     inline fun <T : Action, F : Action> ActionFlow<T>.transformAction(crossinline transformer: suspend (T) -> (F)) =
-        transform {
-            flow {
-                collect {
-                    emit(transformer(it))
-                }
-            }
-        }
+        ActionFlow<F>(flow.map { transformer.invoke(it) })
 
     /**
      * Updates current [state] with value produced by [reducer].

@@ -19,13 +19,12 @@ package com.palatin.cardinalsample.ui.login
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import com.palatin.cardinalsample.data.AccountRepository
 import com.palatin.cardinalsample.data.Result
 import com.palatin.cardinalsample.data.model.Account
 import io.mockk.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import kotlinx.coroutines.test.TestCoroutineScope
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
@@ -130,6 +129,7 @@ class LoginViewModelTest {
         coEvery { accountRepository.login(any(), any()) } returns Result.Success(Account(email, password))
         vm.subscribeOnSideEffects(TestCoroutineScope(), sideEffect)
         vm.dispatch(LoginViewModel.Action.OnLoginClicked)
+
         verify(exactly = 1) { reducer(any(), LoginViewModel.Action.OnLoginClicked) }
         coVerify(exactly = 1) { accountRepository.login(any(), any()) }
         verify(exactly = 1) { reducer(any(), LoginViewModel.Action.LoginAction.SuccessLogin(Account(email, password))) }
