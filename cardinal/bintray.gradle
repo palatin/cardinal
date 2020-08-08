@@ -1,5 +1,5 @@
 apply plugin: 'com.jfrog.bintray'
-apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
 
 
 if (project.hasProperty("android")) { // Android libraries
@@ -31,6 +31,7 @@ artifacts {
 }
 
 
+version = libraryVersion
 
 bintray {
     // Bintray
@@ -43,12 +44,11 @@ bintray {
     user = properties.getProperty("bintray.user")
     key = properties.getProperty("bintray.apikey")
 
-    configurations = ['archives']
-    publications = ['MyPublication']
     pkg {
         repo = bintrayRepo
         name = bintrayName
         desc = libraryDescription
+        configurations = ['archives']
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = allLicenses
@@ -56,6 +56,39 @@ bintray {
         publicDownloadNumbers = true
         version {
             desc = libraryDescription
+        }
+    }
+}
+
+
+group = publishedGroupId
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                groupId publishedGroupId
+                artifactId bintrayName
+                name bintrayName
+                description libraryDescription
+                url siteUrl
+
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'palatin'
+                        name 'Ihor Shamin'
+                        email 'igorshamin96@gmail.com'
+                    }
+                }
+            }
         }
     }
 }
